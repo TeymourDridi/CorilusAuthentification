@@ -72,7 +72,7 @@ public class WebSecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .anyRequest().authenticated();
 
-        http.headers().frameOptions().sameOrigin();
+       // http.headers().frameOptions().sameOrigin();
         http.authenticationProvider(authenticationProvider());
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
