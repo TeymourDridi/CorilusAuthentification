@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 
 
 @RestController
-//@CrossOrigin(origins = "${baseUrl}",allowCredentials ="true",allowedHeaders = "*")
-@CrossOrigin("*")
+//@CrossOrigin(origins = "http://localhost:8080",allowCredentials ="true",allowedHeaders = "*")
+
 @RequestMapping("/auth")
 public class AuthController {
   @Autowired
