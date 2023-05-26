@@ -21,10 +21,6 @@ import tn.corilus.authentification.authentification.service.UserDetailsServiceIm
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(
-    // securedEnabled = true,
-    // jsr250Enabled = true,
-    prePostEnabled = true)
 public class WebSecurityConfig {
 
 
