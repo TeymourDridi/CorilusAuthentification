@@ -24,11 +24,13 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@CrossOrigin(origins = {"https://reacterrordetectiondeployement.azurewebsites.net","http://localhost:3000","https://corilusgateway.azurewebsites.net"},allowCredentials ="true",allowedHeaders = "*",
+/*
+@CrossOrigin(origins = {"http://192.168.56.1:3000","https://reacterrordetectiondeployement.azurewebsites.net","http://localhost:3000","https://corilusgateway.azurewebsites.net"},allowCredentials ="true",allowedHeaders = "*",
         methods= {RequestMethod.GET,RequestMethod.POST,
                 RequestMethod.DELETE, RequestMethod.PUT,
                 RequestMethod.PATCH, RequestMethod.OPTIONS,
                 RequestMethod.HEAD, RequestMethod.TRACE})
+*/
 
 @RequestMapping("/auth")
 public class AuthController {
