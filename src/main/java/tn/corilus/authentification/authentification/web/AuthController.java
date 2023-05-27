@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@CrossOrigin(origins = "https://reacterrordetectiondeployement.azurewebsites.net",allowCredentials ="true",allowedHeaders = "*",
+@CrossOrigin(origins = {"https://reacterrordetectiondeployement.azurewebsites.net","http://localhost:3000","https://corilusgateway.azurewebsites.net"},allowCredentials ="true",allowedHeaders = "*",
         methods= {RequestMethod.GET,RequestMethod.POST,
                 RequestMethod.DELETE, RequestMethod.PUT,
                 RequestMethod.PATCH, RequestMethod.OPTIONS,
