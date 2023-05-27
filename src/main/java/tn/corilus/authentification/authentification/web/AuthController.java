@@ -66,17 +66,8 @@ public class AuthController {
         .map(item -> item.getAuthority())
         .collect(Collectors.toList());
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
 
-    // Set other headers as needed
-    headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "https://reacterrordetectiondeployement.azurewebsites.net");
-    headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, DELETE");
-    headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "Content-Type, Authorization");
-    headers.add(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-    headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
-
-      return ResponseEntity.ok().headers(headers)
+      return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
               .body(new LoginResponse(userDetails.getId(),
                       userDetails.getUsername(),
                       userDetails.getEmail(),
