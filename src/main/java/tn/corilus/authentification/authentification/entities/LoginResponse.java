@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class LoginResponse {
 
+	private String jwt;
 	private Long id;
 
 	private String username;
@@ -28,7 +29,8 @@ public class LoginResponse {
 	private Date lastUpdatedAt;
 	private List<String> roles;
 
-	public LoginResponse(Long id, String username, String email, String name, String lastname, String phone, String gender, Date postedAt, Date lastUpdatedAt, List<String> roles) {
+	public LoginResponse(String jwt,Long id, String username, String email, String name, String lastname, String phone, String gender, Date postedAt, Date lastUpdatedAt, List<String> roles) {
+		this.jwt=jwt;
 		this.id = id;
 		this.username = username;
 		this.email = email;
