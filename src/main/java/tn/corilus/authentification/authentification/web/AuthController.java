@@ -63,13 +63,23 @@ public class AuthController {
 
 
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
+    ResponseCookie jwtCookieSpring = jwtUtils.generateJwtCookieDomain(userDetails,"springdeployement.azurewebsites.net");
+    ResponseCookie jwtCookieReact = jwtUtils.generateJwtCookieDomain(userDetails,"reacterrordetectiondeployement.azurewebsites.net");
+    ResponseCookie jwtCookieAuth = jwtUtils.generateJwtCookieDomain(userDetails,"corilusauthentification.azurewebsites.net");
+    ResponseCookie jwtCookieSubDom = jwtUtils.generateJwtCookieDomain(userDetails,".azurewebsites.net");
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(HttpHeaders.SET_COOKIE,jwtCookie.toString() );
+    headers.add(HttpHeaders.SET_COOKIE,jwtCookieSpring.toString() );
+    headers.add(HttpHeaders.SET_COOKIE, jwtCookieReact.toString());
+    headers.add(HttpHeaders.SET_COOKIE, jwtCookieAuth.toString());
+    headers.add(HttpHeaders.SET_COOKIE,jwtCookieSubDom.toString() );
 
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())
         .collect(Collectors.toList());
 
 
-      return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
+      return ResponseEntity.ok().headers(headers)
               .body(new LoginResponse(userDetails.getId(),
                       userDetails.getUsername(),
                       userDetails.getEmail(),
