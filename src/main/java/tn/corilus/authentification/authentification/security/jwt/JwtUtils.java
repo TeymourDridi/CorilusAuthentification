@@ -46,11 +46,6 @@ public class JwtUtils {
     ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).path("/").maxAge( 24 * 60 * 60).httpOnly(false).sameSite("None").secure(true).build();
     return cookie;
   }
- public ResponseCookie generateJwtCookieDomain(UserDetailsImpl userPrincipal,String domain) {
-    String jwt = generateTokenFromUsername(userPrincipal.getUsername(),userPrincipal.getAuthorities());
-    ResponseCookie cookie = ResponseCookie.from(jwtCookie, jwt).domain(domain).path("/").maxAge( 24 * 60 * 60).httpOnly(false).sameSite("None").secure(true).build();
-    return cookie;
-  }
 
   public ResponseCookie getCleanJwtCookie() {
     ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/").build();
