@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
                 RequestMethod.HEAD, RequestMethod.TRACE})
 */
 
-@RequestMapping("/auth")
+@RequestMapping("/authentication")
 public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;

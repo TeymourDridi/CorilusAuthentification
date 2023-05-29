@@ -11,10 +11,9 @@ public class CorsConfiguration implements WebMvcConfigurer {
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
             .allowedOrigins("http://192.168.56.1:3000","https://reacterrordetectiondeployement.azurewebsites.net","http://localhost:3000","https://corilusgateway.azurewebsites.net")
-            .allowedMethods("GET", "POST", "PUT", "DELETE")
+            .allowedMethods("*")
             .allowedHeaders("*")
             .allowCredentials(true)
-            .exposedHeaders("Set-Cookie") // Expose the Set-Cookie header
             .maxAge(3600);
   }
 }
