@@ -5,12 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tn.corilus.authentification.authentification.entities.Doctor;
 import tn.corilus.authentification.authentification.service.DoctorService;
 
 
-
+@RequestMapping("/user")
 @RestController
 public class DoctorController {
 
@@ -21,7 +22,7 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
+    //@PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
     @GetMapping("/doctor/{id}")
     public ResponseEntity<Doctor> getZones(@PathVariable("id") Long id) {
 

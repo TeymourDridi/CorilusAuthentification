@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 
-@RestController
+
 /*
 @CrossOrigin(origins = {"http://192.168.56.1:3000","https://reacterrordetectiondeployement.azurewebsites.net","http://localhost:3000","https://corilusgateway.azurewebsites.net"},allowCredentials ="true",allowedHeaders = "*",
         methods= {RequestMethod.GET,RequestMethod.POST,
@@ -31,7 +32,7 @@ import java.util.stream.Collectors;
                 RequestMethod.PATCH, RequestMethod.OPTIONS,
                 RequestMethod.HEAD, RequestMethod.TRACE})
 */
-
+@RestController
 @RequestMapping("/authentication")
 public class AuthController {
   @Autowired
@@ -49,6 +50,7 @@ public class AuthController {
   @Autowired
   JwtUtils jwtUtils;
 
+  @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
     if (!userRepository.existsByUsername(loginRequest.getUsername())) {
