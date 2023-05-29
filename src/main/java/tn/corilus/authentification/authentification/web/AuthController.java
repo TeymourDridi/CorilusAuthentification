@@ -141,7 +141,7 @@ public class AuthController {
     return ResponseEntity.ok("ADMIN registered successfully!");
   }
 
-  @PreAuthorize("hasRole('ROLE_DOCTOR')")
+
   @PostMapping("/doctor/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody DoctorSignUpRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
