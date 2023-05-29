@@ -1,6 +1,5 @@
 package tn.corilus.authentification.authentification.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -27,22 +26,30 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/user2")
+@RequestMapping("/authentication")
 public class AuthController {
-  @Autowired
-  AuthenticationManager authenticationManager;
 
-  @Autowired
-  UserRepository userRepository;
+  private final AuthenticationManager authenticationManager;
 
-  @Autowired
-  RoleRepository roleRepository;
 
-  @Autowired
-  PasswordEncoder encoder;
+  private final UserRepository userRepository;
 
-  @Autowired
-  JwtUtils jwtUtils;
+
+  private final RoleRepository roleRepository;
+
+
+  private final PasswordEncoder encoder;
+
+
+  private final JwtUtils jwtUtils;
+
+  public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
+    this.authenticationManager = authenticationManager;
+    this.userRepository = userRepository;
+    this.roleRepository = roleRepository;
+    this.encoder = encoder;
+    this.jwtUtils = jwtUtils;
+  }
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -134,7 +141,7 @@ public class AuthController {
     return ResponseEntity.ok("ADMIN registered successfully!");
   }
 
-
+  @PreAuthorize("hasRole('ROLE_DOCTOR')")
   @PostMapping("/doctor/signup")
   public ResponseEntity<?> registerUser(@Valid @RequestBody DoctorSignUpRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
