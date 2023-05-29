@@ -28,23 +28,28 @@ import java.util.stream.Collectors;
 @RestController
 public class DoctorController {
 
-    @Autowired
-    AuthenticationManager authenticationManager;
 
-    @Autowired
-    UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    RoleRepository roleRepository;
 
-    @Autowired
-    PasswordEncoder encoder;
+    private final UserRepository userRepository;
 
-    @Autowired
-    JwtUtils jwtUtils;
+
+    private final RoleRepository roleRepository;
+
+
+    private final PasswordEncoder encoder;
+
+
+    private final JwtUtils jwtUtils;
     private final DoctorService doctorService;
 
-    public DoctorController(DoctorService doctorService) {
+    public DoctorController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, DoctorService doctorService) {
+        this.authenticationManager = authenticationManager;
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.encoder = encoder;
+        this.jwtUtils = jwtUtils;
         this.doctorService = doctorService;
     }
 
