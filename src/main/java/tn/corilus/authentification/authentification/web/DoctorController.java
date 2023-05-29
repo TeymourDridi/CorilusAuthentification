@@ -57,7 +57,7 @@ public class DoctorController {
     @PostMapping("/doctor/{id}")
     public ResponseEntity<LoginRequest> getZones(@PathVariable("id") Long id,@RequestBody LoginRequest login) {
 
-        return new ResponseEntity<>(login,
+        return new ResponseEntity<>(new LoginRequest("teymour5555","210719950"),
                 HttpStatus.OK);
 
     }
