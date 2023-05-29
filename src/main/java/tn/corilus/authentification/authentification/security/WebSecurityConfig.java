@@ -64,8 +64,8 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests().requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/auth/**").permitAll()
+                .authorizeHttpRequests().requestMatchers("/authentication/**").permitAll()
+                .requestMatchers("/authentication/**").permitAll()
                 .anyRequest().authenticated();
 
         http.headers().frameOptions().sameOrigin();
