@@ -25,15 +25,9 @@ import java.util.stream.Collectors;
 
 
 
-/*
-@CrossOrigin(origins = {"http://192.168.56.1:3000","https://reacterrordetectiondeployement.azurewebsites.net","http://localhost:3000","https://corilusgateway.azurewebsites.net"},allowCredentials ="true",allowedHeaders = "*",
-        methods= {RequestMethod.GET,RequestMethod.POST,
-                RequestMethod.DELETE, RequestMethod.PUT,
-                RequestMethod.PATCH, RequestMethod.OPTIONS,
-                RequestMethod.HEAD, RequestMethod.TRACE})
-*/
+
 @RestController
-@RequestMapping("/authentication")
+@RequestMapping("/user2")
 public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
@@ -50,7 +44,6 @@ public class AuthController {
   @Autowired
   JwtUtils jwtUtils;
 
-  @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
     if (!userRepository.existsByUsername(loginRequest.getUsername())) {

@@ -22,7 +22,7 @@ public class DoctorController {
         this.doctorService = doctorService;
     }
 
-    //@PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
     @GetMapping("/doctor/{id}")
     public ResponseEntity<Doctor> getZones(@PathVariable("id") Long id) {
 
