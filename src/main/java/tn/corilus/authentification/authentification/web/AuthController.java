@@ -72,7 +72,7 @@ public class AuthController {
 
 
       return ResponseEntity.ok()
-              .body(new LoginResponse(jwt,userDetails.getId(),
+              .body(new LoginResponse(userDetails.getId(),
                       userDetails.getUsername(),
                       userDetails.getEmail(),
                       userDetails.getName(),
@@ -81,6 +81,7 @@ public class AuthController {
                       userDetails.getGender(),
                       userDetails.getPostedAt(),
                       userDetails.getLastUpdatedAt(),
+                      jwt,
                       roles));
 
   }

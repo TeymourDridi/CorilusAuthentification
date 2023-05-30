@@ -23,7 +23,7 @@ public class DoctorController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
     @GetMapping("/doctor/{id}")
-    public ResponseEntity<Doctor> getZones(@PathVariable("id") Long id) {
+    public ResponseEntity<Doctor> getDoctor(@PathVariable("id") Long id) {
 
         return new ResponseEntity<>(doctorService.getDoctor(id),
                 HttpStatus.OK);
