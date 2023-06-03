@@ -1,4 +1,4 @@
-
+/*
 package tn.corilus.authentification.authentification.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -18,4 +18,4 @@ public class CorsConfiguration implements WebMvcConfigurer {
             .maxAge(3600);
   }
 }
-
+*/
