@@ -17,6 +17,7 @@ public class Doctor extends User {
     private String niss;
     private String speciality;
     private String address;
+    private String picture;
     private boolean approved=false;
 
 }

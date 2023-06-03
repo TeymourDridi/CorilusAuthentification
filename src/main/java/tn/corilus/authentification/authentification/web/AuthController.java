@@ -3,20 +3,22 @@ package tn.corilus.authentification.authentification.web;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tn.corilus.authentification.authentification.entities.*;
 import tn.corilus.authentification.authentification.repository.RoleRepository;
 import tn.corilus.authentification.authentification.repository.UserRepository;
 import tn.corilus.authentification.authentification.security.jwt.JwtUtils;
+import tn.corilus.authentification.authentification.service.DoctorService;
 import tn.corilus.authentification.authentification.service.UserDetailsImpl;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,12 +45,15 @@ public class AuthController {
 
   private final JwtUtils jwtUtils;
 
-  public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
+  private final DoctorService doctorService;
+
+  public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, DoctorService doctorService) {
     this.authenticationManager = authenticationManager;
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
     this.encoder = encoder;
     this.jwtUtils = jwtUtils;
+    this.doctorService = doctorService;
   }
 
   @PostMapping("/signin")
@@ -196,9 +201,9 @@ public class AuthController {
     }
 
     utilisateur.setRoles(roles);
-    userRepository.save(utilisateur);
 
-    return ResponseEntity.ok("Doctor registered successfully!");
+
+    return ResponseEntity.ok().body(userRepository.save(utilisateur));
   }
 
 
@@ -266,4 +271,12 @@ public class AuthController {
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
         .body("You've been signed out!");
   }
+
+
+  @PostMapping("/doctor/picture/{idUser}")
+  public ResponseEntity<?> registerUser(@PathVariable("idUser") Long idUser,@RequestParam("file") MultipartFile file) throws IOException {
+
+    return ResponseEntity.ok(doctorService.addPicture(idUser,file));
+  }
+
 }
