@@ -15,8 +15,8 @@ import tn.corilus.authentification.authentification.service.DoctorService;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.List;
 
 
 @RestController
@@ -34,6 +34,14 @@ public class DoctorController {
     public ResponseEntity<Doctor> getDoctor(@PathVariable("id") Long id) {
 
         return new ResponseEntity<>(doctorService.getDoctor(id),
+                HttpStatus.OK);
+
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
+    @GetMapping("/doctor/getAll/oredred-doctors-by-approved")
+    public ResponseEntity<List<Doctor>> getDoctor() {
+
+        return new ResponseEntity<>(doctorService.getAllDoctorsOrderdByApprooved(),
                 HttpStatus.OK);
 
     }
@@ -64,4 +72,27 @@ public class DoctorController {
                 HttpStatus.OK);
 
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
+    @PutMapping("/doctor/approove/{id}/{idAdmin}")
+    public ResponseEntity<Doctor> approoveDoctor(@PathVariable("id") Long id,@PathVariable("idAdmin") Long idAdmin) {
+
+        return new ResponseEntity<>(doctorService.approveDoctor(id,idAdmin),
+                HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
+    @PutMapping("/doctor/block/{id}/{idAdmin}")
+    public ResponseEntity<Doctor> blockDoctor(@PathVariable("id") Long id,@PathVariable("idAdmin") Long idAdmin) {
+
+        return new ResponseEntity<>(doctorService.blockDoctor(id,idAdmin),
+                HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
+    @PutMapping("/doctor/unblock/{id}/{idAdmin}")
+    public ResponseEntity<Doctor> unblockDoctor(@PathVariable("id") Long id,@PathVariable("idAdmin") Long idAdmin) {
+
+        return new ResponseEntity<>(doctorService.unblockDoctor(id,idAdmin),
+                HttpStatus.OK);
+    }
+
 }

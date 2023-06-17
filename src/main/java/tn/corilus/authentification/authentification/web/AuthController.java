@@ -14,8 +14,7 @@ import tn.corilus.authentification.authentification.entities.*;
 import tn.corilus.authentification.authentification.repository.RoleRepository;
 import tn.corilus.authentification.authentification.repository.UserRepository;
 import tn.corilus.authentification.authentification.security.jwt.JwtUtils;
-import tn.corilus.authentification.authentification.service.DoctorService;
-import tn.corilus.authentification.authentification.service.UserDetailsImpl;
+import tn.corilus.authentification.authentification.service.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -30,30 +29,26 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/authentication")
 public class AuthController {
-
   private final AuthenticationManager authenticationManager;
-
-
   private final UserRepository userRepository;
-
-
   private final RoleRepository roleRepository;
-
-
   private final PasswordEncoder encoder;
-
-
   private final JwtUtils jwtUtils;
-
   private final DoctorService doctorService;
+  private final AdminService adminService;
+  private final AuthService authService;
+  private final SupportService supportService;
 
-  public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, DoctorService doctorService) {
+  public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils, DoctorService doctorService, AdminService adminService, AuthService authService, SupportService supportService) {
     this.authenticationManager = authenticationManager;
     this.userRepository = userRepository;
     this.roleRepository = roleRepository;
     this.encoder = encoder;
     this.jwtUtils = jwtUtils;
     this.doctorService = doctorService;
+    this.adminService = adminService;
+    this.authService = authService;
+    this.supportService = supportService;
   }
 
   @PostMapping("/signin")
@@ -61,6 +56,7 @@ public class AuthController {
     if (!userRepository.existsByUsername(loginRequest.getUsername())) {
       return ResponseEntity.badRequest().body("Nom d'utilisateur inexistant!");
     }
+
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
@@ -74,7 +70,14 @@ public class AuthController {
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())
         .collect(Collectors.toList());
-
+    if(doctorService.getDoctor(userDetails.getId()) != null) {
+      if (!doctorService.getDoctor(userDetails.getId()).isApproved()) {
+        return ResponseEntity.badRequest().body("Votre Compte N'a Pas été Approver !");
+      }
+    if (doctorService.getDoctor(userDetails.getId()).isBlocked()) {
+        return ResponseEntity.badRequest().body("Votre Compte Est Bloquer !");
+      }
+    }
 
       return ResponseEntity.ok()
               .body(new LoginResponse(userDetails.getId(),
@@ -92,7 +95,7 @@ public class AuthController {
   }
 
   @PostMapping("/admin/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody AdminSignUpRequest signUpRequest) {
+  public ResponseEntity<?> registerAdmin(@Valid @RequestBody AdminSignUpRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity.badRequest().body("Error: Username is already taken!");
     }
@@ -110,7 +113,8 @@ public class AuthController {
     utilisateur.setGender( signUpRequest.getGender());
     utilisateur.setLastname( signUpRequest.getLastname());
     utilisateur.setName( signUpRequest.getName());
-    utilisateur.setHirarchie( signUpRequest.getName());
+    utilisateur.setHirarchie( signUpRequest.getHirarchie());
+    utilisateur.setAddress( signUpRequest.getAddress());
 
     Set<String> strRoles = signUpRequest.getRoles();
     Set<Role> roles = new HashSet<>();
@@ -142,14 +146,14 @@ public class AuthController {
     }
 
     utilisateur.setRoles(roles);
-    userRepository.save(utilisateur);
 
-    return ResponseEntity.ok("ADMIN registered successfully!");
+
+    return ResponseEntity.ok().body(userRepository.save(utilisateur));
   }
 
 
   @PostMapping("/doctor/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody DoctorSignUpRequest signUpRequest) {
+  public ResponseEntity<?> registerDoctor(@Valid @RequestBody DoctorSignUpRequest signUpRequest) {
     if (userRepository.existsByUsername(signUpRequest.getUsername())) {
       return ResponseEntity.badRequest().body("Le nom d'utilisateur est déjà pris !");
     }
@@ -207,60 +211,15 @@ public class AuthController {
   }
 
 
-@PostMapping("/support/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SupportSignUpRequest signUpRequest) {
-    if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-      return ResponseEntity.badRequest().body("Error: Username is already taken!");
+@PostMapping("/support/signup/{idAdmin}")
+  public ResponseEntity<?> registerSupport(@Valid @RequestBody SupportSignUpRequest signUpRequest,@PathVariable("idAdmin") Long idAdmin) {
+    String response= authService.usernameOrMailAlreadyExists(signUpRequest);
+  System.out.println(response);
+    if(!response.contains("Valid")){
+     return ResponseEntity.badRequest().body(response);
     }
 
-    if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-      return ResponseEntity.badRequest().body("Error: Email is already in use!");
-    }
-
-    // Create new support's account
-    Support utilisateur = new Support();
-    utilisateur.setUsername( signUpRequest.getUsername());
-    utilisateur.setEmail( signUpRequest.getEmail());
-    utilisateur.setPassword( encoder.encode(signUpRequest.getPassword()));
-    utilisateur.setPhone( signUpRequest.getPhone());
-    utilisateur.setGender( signUpRequest.getGender());
-    utilisateur.setLastname( signUpRequest.getLastname());
-    utilisateur.setName( signUpRequest.getName());
-    utilisateur.setAverageResponseTime( signUpRequest.getAverageResponseTime());
-
-    Set<String> strRoles = signUpRequest.getRoles();
-    Set<Role> roles = new HashSet<>();
-
-    if (strRoles == null) {
-      Role utilisateurRole = roleRepository.findByName(ERole.ROLE_USER)
-          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-      roles.add(utilisateurRole);
-    } else {
-      strRoles.forEach(role -> {
-        switch (role) {
-          case "ROLE_ADMIN" -> {
-            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(adminRole);
-          }
-          case "ROLE_SUPPORT" -> {
-            Role adminRole = roleRepository.findByName(ERole.ROLE_SUPPORT)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(adminRole);
-          }
-          case "ROLE_DOCTOR" -> {
-            Role adminRole = roleRepository.findByName(ERole.ROLE_DOCTOR)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(adminRole);
-          }
-        }
-      });
-    }
-
-    utilisateur.setRoles(roles);
-    userRepository.save(utilisateur);
-
-    return ResponseEntity.ok("Doctor registered successfully!");
+    return ResponseEntity.ok(authService.registerSupport(signUpRequest,idAdmin));
   }
 
 
@@ -277,6 +236,16 @@ public class AuthController {
   public ResponseEntity<?> registerUser(@PathVariable("idUser") Long idUser,@RequestParam("file") MultipartFile file) throws IOException {
 
     return ResponseEntity.ok(doctorService.addPicture(idUser,file));
+  }
+  @PostMapping("/admin/picture/{idUser}")
+  public ResponseEntity<?> registerAdmin(@PathVariable("idUser") Long idUser,@RequestParam("file") MultipartFile file) throws IOException {
+
+    return ResponseEntity.ok(adminService.addPicture(idUser,file));
+  }
+  @PostMapping("/support/picture/{idUser}")
+  public ResponseEntity<?> addSupportPicture(@PathVariable("idUser") Long idUser,@RequestParam("file") MultipartFile file) throws IOException {
+
+    return ResponseEntity.ok(supportService.addPicture(idUser,file));
   }
 
 }

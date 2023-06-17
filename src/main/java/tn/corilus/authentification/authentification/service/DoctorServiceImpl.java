@@ -12,21 +12,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
+    private final AdminService adminService;
 
-    public DoctorServiceImpl(DoctorRepository doctorRepository) {
+    public DoctorServiceImpl(DoctorRepository doctorRepository, AdminService adminService) {
         this.doctorRepository = doctorRepository;
+        this.adminService = adminService;
     }
 
 
     @Override
     public Doctor getDoctor(Long id) {
-        return doctorRepository.findById(id).orElse(new Doctor());
+        return doctorRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -79,6 +82,38 @@ public class DoctorServiceImpl implements DoctorService {
         originalDoctor.setPhone(doctor.getPhone());
 
         return doctorRepository.save(originalDoctor);
+    }
+
+    @Override
+    public List<Doctor> getAllDoctorsOrderdByApprooved() {
+        return doctorRepository.getAllDoctorsOrderdByApprooved();
+    }
+
+    @Override
+    public Doctor approveDoctor(Long id,Long idAdmin) {
+        Doctor doctor= doctorRepository.findById(id).orElse(null);
+        assert doctor != null;
+        doctor.setApproved(true);
+        doctor.setAdmin(adminService.getAdmin(idAdmin));
+        return doctorRepository.save(doctor);
+    }
+
+    @Override
+    public Doctor blockDoctor(Long id,Long idAdmin) {
+        Doctor doctor= doctorRepository.findById(id).orElse(null);
+        assert doctor != null;
+        doctor.setBlocked(true);
+        doctor.setAdmin(adminService.getAdmin(idAdmin));
+        return doctorRepository.save(doctor);
+    }
+
+    @Override
+    public Doctor unblockDoctor(Long id,Long idAdmin) {
+        Doctor doctor= doctorRepository.findById(id).orElse(null);
+        assert doctor != null;
+        doctor.setBlocked(false);
+        doctor.setAdmin(adminService.getAdmin(idAdmin));
+        return doctorRepository.save(doctor);
     }
 
 }

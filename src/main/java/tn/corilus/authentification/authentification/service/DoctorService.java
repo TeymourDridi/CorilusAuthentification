@@ -3,8 +3,8 @@ package tn.corilus.authentification.authentification.service;
 import org.springframework.web.multipart.MultipartFile;
 import tn.corilus.authentification.authentification.entities.Doctor;
 
-import javax.print.Doc;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Doctor CRUD
@@ -16,4 +16,8 @@ public interface DoctorService {
     Doctor getDoctor(Long id);
     String addPicture(Long idUser, MultipartFile file) throws IOException;
     Doctor modifyDoctor(Doctor doctor);
+    List<Doctor> getAllDoctorsOrderdByApprooved();
+    Doctor approveDoctor(Long id,Long idAdmin);
+    Doctor blockDoctor(Long id,Long idAdmin);
+    Doctor unblockDoctor(Long id,Long idAdmin);
 }

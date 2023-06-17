@@ -23,6 +23,7 @@ public class SupportSignUpRequest {
     private String email;
     private String phone;
     private String gender;
+    private String address;
     private Double averageResponseTime;
 
     private Set<String> roles = new HashSet<>();

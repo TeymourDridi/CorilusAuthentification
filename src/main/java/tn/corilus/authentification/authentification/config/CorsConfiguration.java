@@ -1,4 +1,5 @@
 /*
+
 package tn.corilus.authentification.authentification.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +15,9 @@ public class CorsConfiguration implements WebMvcConfigurer {
             .allowedOrigins("http://192.168.56.1:3000","https://reacterrordetectiondeployement.azurewebsites.net","http://localhost:3000","https://corilusgateway.azurewebsites.net")
             .allowedMethods("*")
             .allowedHeaders("*")
-            .allowCredentials(true)
+            .allowCredentials(false)
             .maxAge(3600);
   }
 }
 */
+

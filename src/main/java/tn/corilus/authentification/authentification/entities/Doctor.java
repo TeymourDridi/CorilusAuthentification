@@ -1,10 +1,13 @@
 package tn.corilus.authentification.authentification.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 
 @Entity
@@ -12,12 +15,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Doctor extends User {
+public class Doctor extends User implements Serializable {
 
     private String niss;
     private String speciality;
-    private String address;
-    private String picture;
-    private boolean approved=false;
 
+    private boolean approved=false;
+    private boolean blocked=false;
+
+    @ManyToOne
+    private Admin admin;
 }

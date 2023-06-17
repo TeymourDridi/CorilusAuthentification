@@ -63,8 +63,8 @@ public class WebSecurityConfig {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeHttpRequests().requestMatchers("/authentication/**").permitAll()
-                .requestMatchers("/authentication/**").permitAll()
+                .authorizeHttpRequests().requestMatchers("/authentication/**","/topic/**","/chat-websocket/**").permitAll()
+                .requestMatchers("/authentication/**","/topic/**","/chat-websocket/**").permitAll()
                 .anyRequest().authenticated();
 
         http.headers().frameOptions().sameOrigin();

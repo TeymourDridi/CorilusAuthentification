@@ -24,6 +24,7 @@ public class AdminSignUpRequest{
     private String phone;
     private String gender;
     private String hirarchie;
+    private String address;
 
     private Set<String> roles = new HashSet<>();
 
