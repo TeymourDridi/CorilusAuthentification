@@ -25,8 +25,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/chat-websocket").setAllowedOrigins("http://localhost:3000","http://localhost:8080");
-        registry.addEndpoint("/chat-websocket").setAllowedOrigins("http://localhost:3000","http://localhost:8080").withSockJS();
+        registry.addEndpoint("/chat-websocket").setAllowedOrigins("http://localhost:3000","http://localhost:8080","https://reacterrordetectiondeployement.azurewebsites.net","https://corilusgateway.azurewebsites.net");
+        registry.addEndpoint("/chat-websocket").setAllowedOrigins("http://localhost:3000","http://localhost:8080","https://reacterrordetectiondeployement.azurewebsites.net","https://corilusgateway.azurewebsites.net").withSockJS();
     }
 
     @Override
