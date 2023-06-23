@@ -1,12 +1,9 @@
 package tn.corilus.authentification.authentification.web;
 
-
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.corilus.authentification.authentification.entities.*;
 import tn.corilus.authentification.authentification.service.ConversationService;
-import tn.corilus.authentification.authentification.service.MessageService;
 
 import java.util.List;
 
@@ -22,10 +19,15 @@ public class ConversationController {
 
 
     @GetMapping("/conversation/getAllConversationsBySupportId/{id}")
-    public List<Conversation> sendMessage(@PathVariable Long id) {
+    public List<Conversation> getAllConversations(@PathVariable Long id) {
 
 
         return conversationService.getConversationBySupportIdAndArchivedIsFalse(id);
+    }
+    @GetMapping("/conversation/getAllArchivedConversationsBySupportId/{id}")
+    public List<Conversation> getAllArchivedConversations(@PathVariable Long id) {
+
+        return conversationService.getConversationsBySupportIdAndArchivedIsTrue(id);
     }
 
 
@@ -33,6 +35,10 @@ public class ConversationController {
     public ResponseEntity<String> markAllMessagesAsReaded(@PathVariable Long conversationId) {
         conversationService.markAllMessagesAsReaded(conversationId);
         return ResponseEntity.ok("All messages marked as readed");
+    }
+    @PutMapping("/conversation/archive/{conversationId}")
+    public ResponseEntity<Conversation> archive(@PathVariable Long conversationId) {
+        return ResponseEntity.ok(conversationService.archiveConversation(conversationId));
     }
 
     @GetMapping("/conversation/getConversationsByDoctorId/{id}")

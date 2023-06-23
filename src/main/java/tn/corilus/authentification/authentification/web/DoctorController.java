@@ -1,9 +1,5 @@
 package tn.corilus.authentification.authentification.web;
 
-
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -48,11 +44,11 @@ public class DoctorController {
 
     @GetMapping(value = "/user/picture/{pictureName}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_GIF_VALUE})
     public ResponseEntity<byte[]> getImageWithMediaType(@PathVariable("pictureName") String pictureName) throws IOException {
-        String imagePath = "pictures/"+pictureName; // Replace with the actual absolute file path
+        String imagePath = "pictures/"+pictureName;
 
         File imageFile = new File(imagePath);
         if (!imageFile.exists() || imageFile.isDirectory()) {
-            // Handle the case where the image file doesn't exist or is a directory
+
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
@@ -92,6 +88,13 @@ public class DoctorController {
     public ResponseEntity<Doctor> unblockDoctor(@PathVariable("id") Long id,@PathVariable("idAdmin") Long idAdmin) {
 
         return new ResponseEntity<>(doctorService.unblockDoctor(id,idAdmin),
+                HttpStatus.OK);
+    }
+    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
+    @GetMapping("/doctor/getsizethismonth")
+    public ResponseEntity<String> getDoctorsAddedThisMonth() {
+
+        return new ResponseEntity<>(doctorService.getDoctorsAddedThisMonth(),
                 HttpStatus.OK);
     }
 

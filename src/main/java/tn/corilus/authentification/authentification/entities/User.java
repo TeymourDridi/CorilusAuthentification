@@ -1,5 +1,6 @@
 package tn.corilus.authentification.authentification.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,9 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Getter
@@ -43,6 +42,8 @@ public abstract class User implements Serializable {
     @UpdateTimestamp
     private Date lastUpdatedAt;
 
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @JsonIgnoreProperties({"user"})
+    private List<Notification> notifications = new ArrayList<>();
 
 }

@@ -116,4 +116,9 @@ public class DoctorServiceImpl implements DoctorService {
         return doctorRepository.save(doctor);
     }
 
+    @Override
+    public String getDoctorsAddedThisMonth() {
+        return String.valueOf(doctorRepository.findDoctorsAddedThisMonth().size());
+    }
+
 }

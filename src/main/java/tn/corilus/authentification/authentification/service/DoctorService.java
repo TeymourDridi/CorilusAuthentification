@@ -20,4 +20,5 @@ public interface DoctorService {
     Doctor approveDoctor(Long id,Long idAdmin);
     Doctor blockDoctor(Long id,Long idAdmin);
     Doctor unblockDoctor(Long id,Long idAdmin);
+    String getDoctorsAddedThisMonth();
 }

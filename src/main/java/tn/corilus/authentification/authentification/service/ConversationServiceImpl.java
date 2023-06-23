@@ -17,13 +17,15 @@ public class ConversationServiceImpl implements ConversationService {
     private final ConversationRepository conversationRepository;
     private final DoctorService doctorService;
     private final SupportService supportService;
+    private final NotificationService notificationService;
     private final MessageRepository messageService;
     private final SimpMessagingTemplate messagingTemplate;
 
-    public ConversationServiceImpl(ConversationRepository conversationRepository, DoctorService doctorService, SupportService supportService, MessageRepository messageService, SimpMessagingTemplate messagingTemplate) {
+    public ConversationServiceImpl(ConversationRepository conversationRepository, DoctorService doctorService, SupportService supportService, NotificationService notificationService, MessageRepository messageService, SimpMessagingTemplate messagingTemplate) {
         this.conversationRepository = conversationRepository;
         this.doctorService = doctorService;
         this.supportService = supportService;
+        this.notificationService = notificationService;
         this.messageService = messageService;
         this.messagingTemplate = messagingTemplate;
     }
@@ -46,7 +48,7 @@ public class ConversationServiceImpl implements ConversationService {
 
         messagingTemplate.convertAndSend("/topic/chat/" + conversation.getSupport().getId(), conversationRepository.findAllBySupportIdAndAndArchivedIsFalseOrderByLastUpdatedAtDesc(conversation.getSupport().getId()));
         messagingTemplate.convertAndSend("/topic/doctor/" + conversation.getDoctor().getId(), getConversationByDoctorIdAndArchivedIsFalse(conversation.getDoctor().getId()));
-
+        notificationService.addNotification("Une nouvelle conversation initier avec le docteur "+conversation.getDoctor().getLastname()+ " "+conversation.getDoctor().getName(),support.getId());
         return conversation;
     }
 
@@ -81,6 +83,28 @@ public class ConversationServiceImpl implements ConversationService {
 
             return conversation;
         }
+    }
+
+    @Override
+    public Conversation archiveConversation(Long conversationId) {
+        Conversation conversation = conversationRepository.findById(conversationId).orElse(null);
+        conversation.setArchived(true);
+
+        conversationRepository.save(conversation);
+        messagingTemplate.convertAndSend("/topic/chat/" + conversation.getSupport().getId(), conversationRepository.findAllBySupportIdAndAndArchivedIsFalseOrderByLastUpdatedAtDesc(conversation.getSupport().getId()));
+        Support support=supportService.getSupport(conversation.getSupport().getId());
+        double averageDate = support.getConversations().stream()
+                .mapToDouble(c -> c.getLastUpdatedAt().getTime() - c.getPostedAt().getTime())
+                .average()
+                .orElse(0.0);
+        support.setAverageResponseTime(averageDate);
+        supportService.modifySupport(support);
+        return conversation;
+    }
+
+    @Override
+    public List<Conversation> getConversationsBySupportIdAndArchivedIsTrue(Long supportId) {
+        return conversationRepository.findAllBySupportIdAndAndArchivedIsTrueOrderByLastUpdatedAtDesc(supportId);
     }
 
 }

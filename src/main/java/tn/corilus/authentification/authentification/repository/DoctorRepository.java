@@ -11,4 +11,7 @@ public interface DoctorRepository extends JpaRepository<Doctor,Long> {
 
     @Query("SELECT d from Doctor d order by d.approved")
     List<Doctor> getAllDoctorsOrderdByApprooved();
+
+    @Query("SELECT d FROM Doctor d WHERE MONTH(d.postedAt) = MONTH(CURRENT_DATE) AND YEAR(d.postedAt) = YEAR(CURRENT_DATE)")
+    List<Doctor> findDoctorsAddedThisMonth();
 }

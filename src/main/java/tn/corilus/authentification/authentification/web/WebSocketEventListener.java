@@ -33,7 +33,6 @@ public class WebSocketEventListener {
         if(username != null) {
             logger.info("User Disconnected : " + username);
 
-
         }
     }
 }

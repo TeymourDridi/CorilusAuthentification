@@ -1,23 +1,10 @@
 package tn.corilus.authentification.authentification.web;
 
-
 import jakarta.ws.rs.NotFoundException;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import tn.corilus.authentification.authentification.entities.*;
 import tn.corilus.authentification.authentification.service.ConversationService;
 import tn.corilus.authentification.authentification.service.MessageService;
-import tn.corilus.authentification.authentification.service.SupportService;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.List;
-
 
 @RestController
 @RequestMapping("/api/chat")
@@ -51,6 +38,5 @@ public class ChatController {
         return messageService.createMessage(conversation, sender, message.getContent());
     }
 
-    // Additional methods for retrieving conversations, messages, etc.
 }
 

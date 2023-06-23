@@ -1,12 +1,8 @@
 package tn.corilus.authentification.authentification.service;
 
-import org.springframework.web.multipart.MultipartFile;
-import tn.corilus.authentification.authentification.entities.Admin;
 import tn.corilus.authentification.authentification.entities.Conversation;
 import tn.corilus.authentification.authentification.entities.Doctor;
-import tn.corilus.authentification.authentification.entities.Support;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -23,5 +19,8 @@ public interface ConversationService {
     void markAllMessagesAsReaded(Long conversationId);
 
     Conversation getConversationByDoctorIdAndArchivedIsFalse(Long doctorId);
+
+    Conversation archiveConversation(Long conversationId);
+    List<Conversation> getConversationsBySupportIdAndArchivedIsTrue(Long supportId);
 
 }

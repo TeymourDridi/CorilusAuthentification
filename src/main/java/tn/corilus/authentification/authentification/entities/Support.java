@@ -24,10 +24,11 @@ public class Support extends User implements Serializable {
 
     private Double averageResponseTime=0.0;
     @ManyToOne
+    @JsonIgnoreProperties({"supports","claims","doctors","notifications"})
     private Admin admin;
 
     @OneToMany(mappedBy = "support", cascade = CascadeType.REMOVE)
-    @JsonIgnoreProperties({"messages","doctor","admin"})
+    @JsonIgnoreProperties({"messages","doctor","admin","support"})
     private List<Conversation> conversations = new ArrayList<>();
 
 }

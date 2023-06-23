@@ -86,7 +86,10 @@ public class AdminServiceImpl implements AdminService {
         return adminRepository.findAll();
     }
 
-
+    @Override
+    public Admin adminWithLeastClaims() {
+        return adminRepository.findAdminWithLeastClaims().get(0);
+    }
 
 
 }

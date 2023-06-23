@@ -71,14 +71,15 @@ public class SupportServiceImpl implements SupportService {
     @Override
     public Support modifySupport(Support support) {
 
-        Support originalAdmin = supportRepository.findById(support.getId()).orElse(null);
-        assert originalAdmin != null;
-        originalAdmin.setEmail(support.getEmail());
-        originalAdmin.setName(support.getName());
-        originalAdmin.setLastname(support.getLastname());
-        originalAdmin.setPhone(support.getPhone());
+        Support originalSupport = supportRepository.findById(support.getId()).orElse(null);
+        assert originalSupport != null;
+        originalSupport.setEmail(support.getEmail());
+        originalSupport.setName(support.getName());
+        originalSupport.setLastname(support.getLastname());
+        originalSupport.setPhone(support.getPhone());
+        originalSupport.setAverageResponseTime(support.getAverageResponseTime());
 
-        return supportRepository.save(originalAdmin);
+        return supportRepository.save(originalSupport);
     }
 
     @Override

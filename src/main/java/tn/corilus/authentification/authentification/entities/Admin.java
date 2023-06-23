@@ -1,6 +1,7 @@
 package tn.corilus.authentification.authentification.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,11 @@ public class Admin extends User {
     private List<Doctor> doctors = new ArrayList<>();
 
     @OneToMany(mappedBy = "admin")
-    @JsonIgnore
+    @JsonIgnoreProperties({"admin","conversations"})
     private List<Support> supports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "admin")
+    @JsonIgnoreProperties({"admin","support"})
+    private List<Claim> claims = new ArrayList<>();
 
 }
