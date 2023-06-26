@@ -89,7 +89,13 @@ public class SupportServiceImpl implements SupportService {
 
     @Override
     public Support getSupportWithLeastConversations() {
-        return supportRepository.findSupportWithLeastConversations();
+        List<Support> supports = supportRepository.findSupportWithLeastConversations();
+
+        if (supports.isEmpty()) {
+            return null;
+        } else {
+            return supports.get(0);
+        }
     }
 
 
