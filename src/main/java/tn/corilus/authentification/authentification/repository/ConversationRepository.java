@@ -11,5 +11,5 @@ public interface ConversationRepository extends JpaRepository<Conversation,Long>
     List<Conversation> findAllBySupportIdAndAndArchivedIsFalseOrderByLastUpdatedAtDesc(Long supportId);
     List<Conversation> findAllBySupportIdAndAndArchivedIsTrueOrderByLastUpdatedAtDesc(Long supportId);
 
-    Conversation findConversationByArchivedIsFalseAndAndDoctorId(Long Id);
+    List<Conversation> findConversationByArchivedIsFalseAndAndDoctorId(Long Id);
 }

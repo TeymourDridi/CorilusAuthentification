@@ -76,12 +76,13 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public Conversation getConversationByDoctorIdAndArchivedIsFalse(Long doctorId) {
-        Conversation conversation =conversationRepository.findConversationByArchivedIsFalseAndAndDoctorId(doctorId);
-        if(conversation==null){
-            return null;
-        }else{
 
-            return conversation;
+        List<Conversation> conversations = conversationRepository.findConversationByArchivedIsFalseAndAndDoctorId(doctorId);
+
+        if (conversations.isEmpty()) {
+            return null;
+        } else {
+            return conversations.get(0);
         }
     }
 

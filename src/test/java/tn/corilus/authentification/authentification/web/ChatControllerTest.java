@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Disabled;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -39,16 +38,19 @@ import tn.corilus.authentification.authentification.service.NotificationServiceI
 import tn.corilus.authentification.authentification.service.SupportServiceImpl;
 
 class ChatControllerTest {
+
+
     /**
      * Method under test: {@link ChatController#createConversation(Long)}
      */
     @Test
-    void testCreateConversation() {
-
+    void testCreateConversation2() {
         // Arrange
+        ArrayList<Conversation> conversationList = new ArrayList<>();
+        conversationList.add(new Conversation());
         ConversationRepository conversationRepository = mock(ConversationRepository.class);
         when(conversationRepository.findConversationByArchivedIsFalseAndAndDoctorId((Long) any()))
-                .thenReturn(new Conversation());
+                .thenReturn(conversationList);
         when(conversationRepository.save((Conversation) any())).thenReturn(new Conversation());
         when(conversationRepository.findAllBySupportIdAndAndArchivedIsFalseOrderByLastUpdatedAtDesc((Long) any()))
                 .thenReturn(new ArrayList<>());
@@ -108,8 +110,6 @@ class ChatControllerTest {
      */
     @Test
     void testSendMessage2() {
-
-
         // Arrange
         ConversationRepository conversationRepository = mock(ConversationRepository.class);
         when(conversationRepository.findById((Long) any())).thenReturn(Optional.of(new Conversation()));
@@ -138,15 +138,11 @@ class ChatControllerTest {
         verify(messageService1).createMessage((Conversation) any(), (User) any(), (String) any());
     }
 
-
-
     /**
      * Method under test: {@link ChatController#sendMessage(Long, boolean, Message)}
      */
     @Test
     void testSendMessage5() {
-
-
         // Arrange
         ConversationRepository conversationRepository = mock(ConversationRepository.class);
         when(conversationRepository.findById((Long) any())).thenReturn(Optional.of(new Conversation()));
@@ -174,7 +170,6 @@ class ChatControllerTest {
         verify(conversationRepository).findById((Long) any());
         verify(messageService1).createMessage((Conversation) any(), (User) any(), (String) any());
     }
-
 
 }
 

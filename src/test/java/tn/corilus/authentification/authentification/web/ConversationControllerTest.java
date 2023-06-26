@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.Message;
@@ -29,6 +30,7 @@ import tn.corilus.authentification.authentification.repository.NotificationRepos
 import tn.corilus.authentification.authentification.repository.SupportRepository;
 import tn.corilus.authentification.authentification.repository.UserRepository;
 import tn.corilus.authentification.authentification.service.AdminServiceImpl;
+import tn.corilus.authentification.authentification.service.ConversationService;
 import tn.corilus.authentification.authentification.service.ConversationServiceImpl;
 import tn.corilus.authentification.authentification.service.DoctorServiceImpl;
 import tn.corilus.authentification.authentification.service.NotificationServiceImpl;
@@ -70,11 +72,13 @@ class ConversationControllerTest {
     }
 
 
+
     /**
      * Method under test: {@link ConversationController#getAllArchivedConversations(Long)}
      */
     @Test
     void testGetAllArchivedConversations() {
+
         // Arrange
         ConversationRepository conversationRepository = mock(ConversationRepository.class);
         ArrayList<Conversation> conversationList = new ArrayList<>();
@@ -109,6 +113,7 @@ class ConversationControllerTest {
      */
     @Test
     void testMarkAllMessagesAsReaded2() {
+
         // Arrange
         Conversation conversation = new Conversation();
         conversation.setSupport(new Support());
@@ -145,6 +150,7 @@ class ConversationControllerTest {
         verify(conversationRepository).findById((Long) any());
         verify(messageChannel).send((Message<Object>) any());
     }
+
 
 
     /**
@@ -195,15 +201,18 @@ class ConversationControllerTest {
         verify(messageChannel).send((Message<Object>) any());
     }
 
+
     /**
      * Method under test: {@link ConversationController#getConversationByDoctorId(Long)}
      */
     @Test
-    void testGetConversationByDoctorId() {
+    void testGetConversationByDoctorId2() {
         // Arrange
+        ArrayList<Conversation> conversationList = new ArrayList<>();
+        conversationList.add(new Conversation());
         ConversationRepository conversationRepository = mock(ConversationRepository.class);
         when(conversationRepository.findConversationByArchivedIsFalseAndAndDoctorId((Long) any()))
-                .thenReturn(new Conversation());
+                .thenReturn(conversationList);
         DoctorRepository doctorRepository = mock(DoctorRepository.class);
         DoctorServiceImpl doctorService = new DoctorServiceImpl(doctorRepository,
                 new AdminServiceImpl(mock(AdminRepository.class)));
@@ -232,34 +241,20 @@ class ConversationControllerTest {
      * Method under test: {@link ConversationController#getConversationByDoctorId(Long)}
      */
     @Test
-    void testGetConversationByDoctorId2() {
+    void testGetConversationByDoctorId3() {
         // Arrange
-        ConversationRepository conversationRepository = mock(ConversationRepository.class);
-        when(conversationRepository.findConversationByArchivedIsFalseAndAndDoctorId((Long) any())).thenReturn(null);
-        DoctorRepository doctorRepository = mock(DoctorRepository.class);
-        DoctorServiceImpl doctorService = new DoctorServiceImpl(doctorRepository,
-                new AdminServiceImpl(mock(AdminRepository.class)));
-
-        SupportServiceImpl supportService = new SupportServiceImpl(mock(SupportRepository.class));
-        NotificationRepository notificationRepository = mock(NotificationRepository.class);
-        UserRepository userRepository = mock(UserRepository.class);
-        NotificationServiceImpl notificationService = new NotificationServiceImpl(notificationRepository, userRepository,
-                new SimpMessagingTemplate(mock(MessageChannel.class)));
-
-        MessageRepository messageService = mock(MessageRepository.class);
+        ConversationService conversationService = mock(ConversationService.class);
+        when(conversationService.getConversationByDoctorIdAndArchivedIsFalse((Long) any())).thenReturn(null);
 
         // Act
-        ResponseEntity<?> actualConversationByDoctorId = (new ConversationController(
-                new ConversationServiceImpl(conversationRepository, doctorService, supportService, notificationService,
-                        messageService, new SimpMessagingTemplate(mock(MessageChannel.class))))).getConversationByDoctorId(123L);
+        ResponseEntity<?> actualConversationByDoctorId = (new ConversationController(conversationService))
+                .getConversationByDoctorId(123L);
 
         // Assert
         assertNull(actualConversationByDoctorId.getBody());
         assertEquals(404, actualConversationByDoctorId.getStatusCodeValue());
         assertTrue(actualConversationByDoctorId.getHeaders().isEmpty());
-        verify(conversationRepository).findConversationByArchivedIsFalseAndAndDoctorId((Long) any());
+        verify(conversationService).getConversationByDoctorIdAndArchivedIsFalse((Long) any());
     }
-
-
 }
 
