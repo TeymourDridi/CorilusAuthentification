@@ -33,6 +33,9 @@ public class ConversationServiceImpl implements ConversationService {
 
     @Override
     public Conversation createConversation(Doctor doctor) {
+        if(getConversationByDoctorIdAndArchivedIsFalse(doctor.getId())!=null){
+            return null;
+        }
         Conversation conversation = new Conversation();
         Support support = supportService.getSupportWithLeastConversations();
 
