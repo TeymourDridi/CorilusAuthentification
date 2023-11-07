@@ -19,7 +19,6 @@ import java.util.Date;
 @AllArgsConstructor
 public class Claim implements Serializable {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -50,6 +49,5 @@ public class Claim implements Serializable {
     @ManyToOne
     @JsonIgnoreProperties({"admin","doctors","supports"})
     private Admin admin;
-
 
 }

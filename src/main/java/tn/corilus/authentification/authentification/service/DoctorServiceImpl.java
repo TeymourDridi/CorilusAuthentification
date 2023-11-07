@@ -18,7 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-
 @Service
 public class DoctorServiceImpl implements DoctorService {
 
@@ -34,7 +33,6 @@ public class DoctorServiceImpl implements DoctorService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-
     @Override
     public Doctor getDoctor(Long id) {
         return doctorRepository.findById(id).orElse(null);
@@ -42,7 +40,6 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public String addPicture(Long idUser, MultipartFile file) throws IOException {
-
         Doctor doctor = doctorRepository.findById(idUser).orElse(null);
         if (doctor == null) {
             return "Doctor not found";
@@ -56,20 +53,15 @@ public class DoctorServiceImpl implements DoctorService {
 
         if (!file.isEmpty()) {
             try {
-                // Define the file path where you want to save the picture
-
-                System.out.println(uploadPath);
-                // Save the file to the specified location
                 File outputFile = uploadPath.toFile();
                 BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
                 outputStream.write(file.getBytes());
                 outputStream.flush();
                 outputStream.close();
-               doctor.setPicture(fileName);
-               doctorRepository.save(doctor);
+                doctor.setPicture(fileName);
+                doctorRepository.save(doctor);
                 return fileName;
             } catch (IOException e) {
-                // Handle the exception
                 return "Error while saving the picture";
             }
         } else {

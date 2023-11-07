@@ -32,7 +32,6 @@ public class ChatController {
         if (conversation == null) {
             throw new NotFoundException("Conversation not found");
         }
-
         User sender = isDoctorMessage ? conversation.getDoctor() : conversation.getSupport();
 
         return messageService.createMessage(conversation, sender, message.getContent());

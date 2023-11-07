@@ -12,16 +12,13 @@ import tn.corilus.authentification.authentification.repository.UserRepository;
 import java.util.HashSet;
 import java.util.Set;
 
-
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final AdminService adminService;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-
     private final PasswordEncoder encoder;
-
 
     public AuthServiceImpl(AdminService adminService, UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder) {
         this.adminService = adminService;
@@ -35,7 +32,6 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             return "Error: Username is already taken!";
         }
-
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             return "Error: Email is already in use!";
         }
@@ -43,9 +39,6 @@ public class AuthServiceImpl implements AuthService {
     }
     @Override
     public Support registerSupport(SupportSignUpRequest signUpRequest, Long idAdmin) {
-
-
-
         // Create new support's account
         Support utilisateur = new Support();
         utilisateur.setUsername( signUpRequest.getUsername());
@@ -87,13 +80,9 @@ public class AuthServiceImpl implements AuthService {
                 }
             });
         }
-
         utilisateur.setRoles(roles);
-
-
 
         return userRepository.save(utilisateur);
     }
-
 
 }

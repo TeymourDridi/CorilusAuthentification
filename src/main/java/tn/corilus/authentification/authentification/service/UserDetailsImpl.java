@@ -1,7 +1,5 @@
 package tn.corilus.authentification.authentification.service;
 
-
-
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,6 +14,7 @@ import java.util.stream.Collectors;
 
 @ToString
 public class UserDetailsImpl implements UserDetails {
+
   private static final long serialVersionUID = 1L;
 
   private Long id;
@@ -137,4 +136,5 @@ public class UserDetailsImpl implements UserDetails {
     UserDetailsImpl user = (UserDetailsImpl) o;
     return Objects.equals(id, user.id);
   }
+
 }

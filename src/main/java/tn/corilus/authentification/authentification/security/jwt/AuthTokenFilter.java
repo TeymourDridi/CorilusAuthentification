@@ -14,10 +14,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 import tn.corilus.authentification.authentification.service.UserDetailsServiceImpl;
 
-
 import java.io.IOException;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
+
   @Autowired
   private JwtUtils jwtUtils;
 
@@ -33,22 +33,16 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       String jwt = parseJwt(request);
       if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
         String username = jwtUtils.getUserNameFromJwtToken(jwt);
-
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
         UsernamePasswordAuthenticationToken authentication =
-            new UsernamePasswordAuthenticationToken(userDetails,
-                                                    null,
-                                                    userDetails.getAuthorities());
+            new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
 
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
       }
     } catch (Exception e) {
       logger.error("Cannot set user authentication: {}", e);
     }
-
     filterChain.doFilter(request, response);
   }
 
@@ -59,4 +53,5 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     }
     return null;
   }
+
 }

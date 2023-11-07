@@ -7,7 +7,6 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-
 import java.io.Serializable;
 import java.util.*;
 
@@ -22,13 +21,21 @@ public abstract class User implements Serializable {
     private Long id;
 
     private String name;
+
     private String lastname;
+
     private String username;
+
     private String password;
+
     private String email;
+
     private String phone;
+
     private String gender;
+
     private String picture;
+
     private String address;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -39,6 +46,7 @@ public abstract class User implements Serializable {
 
     @CreationTimestamp
     private Date postedAt;
+
     @UpdateTimestamp
     private Date lastUpdatedAt;
 

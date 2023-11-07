@@ -10,4 +10,5 @@ import tn.corilus.authentification.authentification.entities.*;
 public interface MessageService {
 
     Message createMessage(Conversation conversation, User sender, String content);
+
 }

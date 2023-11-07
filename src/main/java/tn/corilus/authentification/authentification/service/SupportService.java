@@ -1,7 +1,6 @@
 package tn.corilus.authentification.authentification.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import tn.corilus.authentification.authentification.entities.Admin;
 import tn.corilus.authentification.authentification.entities.Support;
 
 import java.io.IOException;
@@ -21,7 +20,9 @@ public interface SupportService {
     Support modifySupport(Support support);
 
     List<Support> getAllSupports();
+
     Support getSupportWithLeastConversations();
 
     String deleteSupport(Long id);
+
 }

@@ -19,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 public class Admin extends User {
 
-
     private String hirarchie;
 
     @OneToMany(mappedBy = "admin")

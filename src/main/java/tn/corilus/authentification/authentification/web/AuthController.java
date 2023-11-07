@@ -23,12 +23,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
-
-
 @RestController
 @RequestMapping("/authentication")
 public class AuthController {
+
   private final AuthenticationManager authenticationManager;
   private final UserRepository userRepository;
   private final RoleRepository roleRepository;
@@ -63,7 +61,6 @@ public class AuthController {
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
 
     String jwt = jwtUtils.generateTokenFromUsername(userDetails.getUsername(),userDetails.getAuthorities());
 
@@ -144,13 +141,10 @@ public class AuthController {
         }
       });
     }
-
     utilisateur.setRoles(roles);
-
 
     return ResponseEntity.ok().body(userRepository.save(utilisateur));
   }
-
 
   @PostMapping("/doctor/signup")
   public ResponseEntity<?> registerDoctor(@Valid @RequestBody DoctorSignUpRequest signUpRequest) {
@@ -203,13 +197,10 @@ public class AuthController {
         }
       });
     }
-
     utilisateur.setRoles(roles);
-
 
     return ResponseEntity.ok().body(userRepository.save(utilisateur));
   }
-
 
 @PostMapping("/support/signup/{idAdmin}")
   public ResponseEntity<?> registerSupport(@Valid @RequestBody SupportSignUpRequest signUpRequest,@PathVariable("idAdmin") Long idAdmin) {
@@ -218,11 +209,8 @@ public class AuthController {
     if(!response.contains("Valid")){
      return ResponseEntity.badRequest().body(response);
     }
-
     return ResponseEntity.ok(authService.registerSupport(signUpRequest,idAdmin));
   }
-
-
 
   @PostMapping("/signout")
   public ResponseEntity<?> logoutUtilisateur() {
@@ -230,7 +218,6 @@ public class AuthController {
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString())
         .body("You've been signed out!");
   }
-
 
   @PostMapping("/doctor/picture/{idUser}")
   public ResponseEntity<?> registerUser(@PathVariable("idUser") Long idUser,@RequestParam("file") MultipartFile file) throws IOException {
@@ -242,6 +229,7 @@ public class AuthController {
 
     return ResponseEntity.ok(adminService.addPicture(idUser,file));
   }
+
   @PostMapping("/support/picture/{idUser}")
   public ResponseEntity<?> addSupportPicture(@PathVariable("idUser") Long idUser,@RequestParam("file") MultipartFile file) throws IOException {
 

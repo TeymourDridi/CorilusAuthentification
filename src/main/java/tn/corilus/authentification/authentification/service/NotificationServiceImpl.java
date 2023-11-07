@@ -9,7 +9,6 @@ import tn.corilus.authentification.authentification.repository.UserRepository;
 
 import java.util.List;
 
-
 @Service
 public class NotificationServiceImpl implements NotificationService {
 

@@ -1,4 +1,5 @@
 package tn.corilus.authentification.authentification.web;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-/**
- * Created by rajeevkumarsingh on 25/07/17.
- */
 @Component
 public class WebSocketEventListener {
 
@@ -28,11 +26,10 @@ public class WebSocketEventListener {
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-
         String username = (String) headerAccessor.getSessionAttributes().get("username");
         if(username != null) {
             logger.info("User Disconnected : " + username);
-
         }
     }
+
 }

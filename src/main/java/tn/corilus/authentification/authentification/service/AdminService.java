@@ -20,5 +20,7 @@ public interface AdminService {
     Admin modifyAdmin(Admin admin);
 
     List<Admin> getAllAdmins();
+
     Admin adminWithLeastClaims();
+
 }

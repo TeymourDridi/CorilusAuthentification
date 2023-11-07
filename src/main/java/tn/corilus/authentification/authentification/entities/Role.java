@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "roles")
 public class Role {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
@@ -14,7 +15,6 @@ public class Role {
   private ERole name;
 
   public Role() {
-
   }
 
   public Role(ERole name) {
@@ -36,4 +36,5 @@ public class Role {
   public void setName(ERole name) {
     this.name = name;
   }
+
 }

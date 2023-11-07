@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-
 @Service
 public class AdminServiceImpl implements AdminService {
 
@@ -24,15 +23,13 @@ public class AdminServiceImpl implements AdminService {
         this.adminRepository = adminRepository;
     }
 
-
     @Override
     public Admin getAdmin(Long id) {
         return adminRepository.findById(id).orElse(null);
     }
 
     @Override
-    public String addPicture(Long idUser, MultipartFile file) throws IOException {
-
+    public String addPicture(Long idUser, MultipartFile file) {
         Admin admin = adminRepository.findById(idUser).orElse(null);
         if (admin == null) {
             return "Doctor not found";
@@ -43,13 +40,8 @@ public class AdminServiceImpl implements AdminService {
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();
         }
-
         if (!file.isEmpty()) {
             try {
-                // Define the file path where you want to save the picture
-
-                System.out.println(uploadPath);
-                // Save the file to the specified location
                 File outputFile = uploadPath.toFile();
                 BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
                 outputStream.write(file.getBytes());
@@ -70,7 +62,6 @@ public class AdminServiceImpl implements AdminService {
     @Transactional
     @Override
     public Admin modifyAdmin(Admin admin) {
-
         Admin originalAdmin = adminRepository.findById(admin.getId()).orElse(null);
         assert originalAdmin != null;
         originalAdmin.setEmail(admin.getEmail());
@@ -90,6 +81,5 @@ public class AdminServiceImpl implements AdminService {
     public Admin adminWithLeastClaims() {
         return adminRepository.findAdminWithLeastClaims().get(0);
     }
-
 
 }

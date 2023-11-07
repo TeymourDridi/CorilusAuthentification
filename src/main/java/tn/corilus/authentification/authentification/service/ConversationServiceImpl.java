@@ -10,7 +10,6 @@ import tn.corilus.authentification.authentification.repository.MessageRepository
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 @Service
 public class ConversationServiceImpl implements ConversationService {
 
@@ -78,14 +77,11 @@ public class ConversationServiceImpl implements ConversationService {
 
         conversation.getMessages().forEach(message -> message.setReaded(true));
         conversationRepository.save(conversation);
-
         messagingTemplate.convertAndSend("/topic/chat/" + conversation.getSupport().getId(), conversationRepository.findAllBySupportIdAndAndArchivedIsFalseOrderByLastUpdatedAtDesc(conversation.getSupport().getId()));
-
     }
 
     @Override
     public Conversation getConversationByDoctorIdAndArchivedIsFalse(Long doctorId) {
-
         List<Conversation> conversations = conversationRepository.findConversationByArchivedIsFalseAndAndDoctorId(doctorId);
 
         if (conversations.isEmpty()) {
@@ -99,7 +95,6 @@ public class ConversationServiceImpl implements ConversationService {
     public Conversation archiveConversation(Long conversationId) {
         Conversation conversation = conversationRepository.findById(conversationId).orElse(null);
         conversation.setArchived(true);
-
         conversationRepository.save(conversation);
         messagingTemplate.convertAndSend("/topic/chat/" + conversation.getSupport().getId(), conversationRepository.findAllBySupportIdAndAndArchivedIsFalseOrderByLastUpdatedAtDesc(conversation.getSupport().getId()));
         Support support=supportService.getSupport(conversation.getSupport().getId());

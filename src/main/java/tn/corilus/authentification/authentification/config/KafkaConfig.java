@@ -43,6 +43,7 @@ public class KafkaConfig {
 
         return new DefaultKafkaProducerFactory<>(configProps);
     }
+
  @Bean
     public ProducerFactory<String, EmailDetails> producerFactoryEmail() {
         Map<String, Object> configProps = new HashMap<>();
@@ -60,6 +61,7 @@ public class KafkaConfig {
     public KafkaTemplate<String, Conversation> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
+
     @Bean
     public KafkaTemplate<String, EmailDetails> kafkaTemplateEmail() {
         return new KafkaTemplate<>(producerFactoryEmail());
@@ -76,8 +78,7 @@ public class KafkaConfig {
         configProps.put("sasl.mechanism", "PLAIN");
         configProps.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"" + apiKey + "\" password=\"" + apiSecret + "\";");
 
-        return new DefaultKafkaConsumerFactory<>(configProps, new StringDeserializer(),
-                new JsonDeserializer<>(Conversation.class));
+        return new DefaultKafkaConsumerFactory<>(configProps, new StringDeserializer(),new JsonDeserializer<>(Conversation.class));
     }
 
     @Bean
@@ -86,4 +87,5 @@ public class KafkaConfig {
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
+
 }

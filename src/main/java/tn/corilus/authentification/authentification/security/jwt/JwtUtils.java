@@ -1,6 +1,5 @@
 package tn.corilus.authentification.authentification.security.jwt;
 
-
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 import tn.corilus.authentification.authentification.service.UserDetailsImpl;
 
-
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtUtils {
+
   private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
   @Value("${warskoder.app.jwtSecret}")
@@ -71,7 +70,6 @@ public class JwtUtils {
     } catch (IllegalArgumentException e) {
       logger.error("JWT claims string is empty: {}", e.getMessage());
     }
-
     return false;
   }
 
@@ -88,4 +86,5 @@ public class JwtUtils {
         .signWith(SignatureAlgorithm.HS512, jwtSecret)
         .compact();
   }
+
 }

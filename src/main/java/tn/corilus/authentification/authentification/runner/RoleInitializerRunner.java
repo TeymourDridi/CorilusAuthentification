@@ -29,15 +29,11 @@ public class RoleInitializerRunner implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         for (ERole enumRole : ERole.values()) {
-
             if (roleRepository.findByName(enumRole).isEmpty()) {
                 Role role = new Role();
                 role.setName(enumRole);
                 roleRepository.save(role);
-
             }
-
-
         }
         if(adminRepository.findAll().isEmpty()) {
             Admin utilisateur = new Admin();
@@ -55,9 +51,7 @@ public class RoleInitializerRunner implements CommandLineRunner {
             roles.add(adminRole);
             utilisateur.setRoles(roles);
             adminRepository.save(utilisateur);
-            
-
-
         }
     }
+
 }

@@ -60,20 +60,15 @@ public class SupportServiceImpl implements SupportService {
 
         if (!file.isEmpty()) {
             try {
-                // Define the file path where you want to save the picture
-
-                System.out.println(uploadPath);
-                // Save the file to the specified location
                 File outputFile = uploadPath.toFile();
                 BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
                 outputStream.write(file.getBytes());
                 outputStream.flush();
                 outputStream.close();
-               support.setPicture(fileName);
+                support.setPicture(fileName);
                 supportRepository.save(support);
                 return fileName;
             } catch (IOException e) {
-                // Handle the exception
                 return "Error while saving the picture";
             }
         } else {
@@ -84,7 +79,6 @@ public class SupportServiceImpl implements SupportService {
     @Transactional
     @Override
     public Support modifySupport(Support support) {
-
         Support originalSupport = supportRepository.findById(support.getId()).orElse(null);
         assert originalSupport != null;
         originalSupport.setEmail(support.getEmail());
@@ -92,7 +86,6 @@ public class SupportServiceImpl implements SupportService {
         originalSupport.setLastname(support.getLastname());
         originalSupport.setPhone(support.getPhone());
         originalSupport.setAverageResponseTime(support.getAverageResponseTime());
-
         return supportRepository.save(originalSupport);
     }
 
@@ -115,7 +108,6 @@ public class SupportServiceImpl implements SupportService {
     @Override
     public String deleteSupport(Long id) {
         Support support =supportRepository.findSupportWithLeastConversations(id).size()>0 ? supportRepository.findSupportWithLeastConversations(id).get(0):null;
-
         for(Conversation conversation : conversationRepository.findAllBySupportId(id)){
             conversation.setSupport(support);
             for(Message message : conversation.getMessages()){
@@ -134,6 +126,5 @@ public class SupportServiceImpl implements SupportService {
         supportRepository.deleteById(id);
         return "Support effacé avec succès";
     }
-
 
 }

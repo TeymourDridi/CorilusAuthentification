@@ -21,13 +21,13 @@ import java.util.List;
 @AllArgsConstructor
 public class Conversation implements Serializable {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @CreationTimestamp
     private Date postedAt;
+
     @UpdateTimestamp
     private Date lastUpdatedAt;
 
@@ -47,5 +47,4 @@ public class Conversation implements Serializable {
     @JsonIgnoreProperties({"conversation"})
     private List<Message> messages = new ArrayList<>();
 
-    // Constructors, getters, and setters
 }

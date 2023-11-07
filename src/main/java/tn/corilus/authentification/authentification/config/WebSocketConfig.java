@@ -46,9 +46,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                         System.out.println("Received message on /topic/chat/1: " + message);
                     }
                 }
-
                 return message;
             }
         });
     }
+
 }

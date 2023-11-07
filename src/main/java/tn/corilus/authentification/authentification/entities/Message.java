@@ -1,6 +1,5 @@
 package tn.corilus.authentification.authentification.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Message implements Serializable {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,5 +37,4 @@ public class Message implements Serializable {
     @JoinColumn(name = "sender_id")
     private User sender;
 
-    // Constructors, getters, and setters
 }

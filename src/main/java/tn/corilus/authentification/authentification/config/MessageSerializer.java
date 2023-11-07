@@ -42,4 +42,5 @@ public class MessageSerializer implements Serializer<Message> {
     public void close() {
         // No resources to close
     }
+
 }

@@ -12,6 +12,9 @@ import java.util.List;
 public interface NotificationService {
 
     Notification addNotification(String message,Long idUser);
+
     List<Notification> getAllNotificationsByUser(Long idUser);
+
     List<Notification> notificationReaded(Long idUser);
+
 }

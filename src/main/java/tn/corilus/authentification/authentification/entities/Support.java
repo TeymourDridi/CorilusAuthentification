@@ -21,8 +21,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Support extends User implements Serializable {
 
-
     private Double averageResponseTime=0.0;
+
     @ManyToOne
     @JsonIgnoreProperties({"supports","claims","doctors","notifications"})
     private Admin admin;

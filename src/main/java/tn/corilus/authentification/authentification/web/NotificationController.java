@@ -1,6 +1,5 @@
 package tn.corilus.authentification.authentification.web;
 
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +10,6 @@ import tn.corilus.authentification.authentification.service.NotificationService;
 
 import java.util.List;
 
-
 @RestController
 public class NotificationController {
 
@@ -21,10 +19,6 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-
-
-
-
     @PutMapping("/notification/mark-as-readed/{userId}")
     public ResponseEntity<String> markAllMessagesAsReaded(@PathVariable Long userId) {
         notificationService.notificationReaded(userId);
@@ -33,11 +27,8 @@ public class NotificationController {
 
     @GetMapping("/notification/getAll/{userId}")
     public ResponseEntity<List<Notification>> getAllNotification(@PathVariable Long userId) {
-
         return ResponseEntity.ok(notificationService.getAllNotificationsByUser(userId));
     }
-
-
 
 }
 

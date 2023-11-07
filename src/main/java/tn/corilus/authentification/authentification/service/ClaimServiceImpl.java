@@ -7,7 +7,6 @@ import tn.corilus.authentification.authentification.repository.ClaimRepository;
 
 import java.util.List;
 
-
 @Service
 public class ClaimServiceImpl implements ClaimService {
 
@@ -20,7 +19,6 @@ public class ClaimServiceImpl implements ClaimService {
         this.adminService = adminService;
         this.notificationService = notificationService;
     }
-
 
     @Override
     public List<Claim> getAllClaimsByAdminIdAndAcceptedIsNull(Long adminId) {
@@ -59,7 +57,7 @@ public class ClaimServiceImpl implements ClaimService {
             return null;
         }
         claim.setAdmin(admin);
-        notificationService.addNotification("Une Nouvelle Reclamation a été soumise par "+ claim.getSupport().getLastname()+" "+claim.getSupport().getName(),admin.getId());
+        notificationService.addNotification("Une Nouvelle Réclamation a été soumise par "+ claim.getSupport().getLastname()+" "+claim.getSupport().getName(),admin.getId());
 
         return claimRepository.save(claim);
     }
@@ -95,10 +93,8 @@ public class ClaimServiceImpl implements ClaimService {
             notificationService.addNotification("Votre Reclamation "+claim1.getSubject()+" a été accepter par " +claim1.getAdmin().getLastname()+" "+claim1.getAdmin().getName(),claim1.getSupport().getId());
         }else{
             notificationService.addNotification("Votre Reclamation "+claim1.getSubject()+" a été refuser par " +claim1.getAdmin().getLastname()+" "+claim1.getAdmin().getName(),claim1.getSupport().getId());
-
         }
         return claimRepository.save(claim1);
     }
-
 
 }

@@ -19,29 +19,22 @@ import java.util.Date;
 @AllArgsConstructor
 public class Notification implements Serializable {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
     private boolean readed;
-
 
     private String message;
 
     @CreationTimestamp
     private Date postedAt;
+
     @UpdateTimestamp
     private Date lastUpdatedAt;
-
 
     @ManyToOne
     @JsonIgnoreProperties({"admin","conversations","support","claims"})
     private User user;
-
-
-
 
 }
