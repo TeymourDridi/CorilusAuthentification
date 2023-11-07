@@ -14,10 +14,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
-
 @RestController
 public class DoctorController {
-
 
     private final DoctorService doctorService;
 
@@ -68,14 +66,16 @@ public class DoctorController {
                 HttpStatus.OK);
 
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/doctor/approove/{id}/{idAdmin}")
     public ResponseEntity<Doctor> approoveDoctor(@PathVariable("id") Long id,@PathVariable("idAdmin") Long idAdmin) {
 
         return new ResponseEntity<>(doctorService.approveDoctor(id,idAdmin),
                 HttpStatus.OK);
     }
-    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/doctor/block/{id}/{idAdmin}")
     public ResponseEntity<Doctor> blockDoctor(@PathVariable("id") Long id,@PathVariable("idAdmin") Long idAdmin) {
 
@@ -83,18 +83,27 @@ public class DoctorController {
                 HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/doctor/unblock/{id}/{idAdmin}")
     public ResponseEntity<Doctor> unblockDoctor(@PathVariable("id") Long id,@PathVariable("idAdmin") Long idAdmin) {
 
         return new ResponseEntity<>(doctorService.unblockDoctor(id,idAdmin),
                 HttpStatus.OK);
     }
+
     @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_DOCTOR') || hasRole('ROLE_SUPPORT')")
     @GetMapping("/doctor/getsizethismonth")
     public ResponseEntity<String> getDoctorsAddedThisMonth() {
 
         return new ResponseEntity<>(doctorService.getDoctorsAddedThisMonth(),
+                HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN') ")
+    @DeleteMapping("/doctor/delete/{id}")
+    public ResponseEntity<String> deleteDoctor(@PathVariable Long id ) {
+
+        return new ResponseEntity<>(doctorService.deleteDoctor(id),
                 HttpStatus.OK);
     }
 

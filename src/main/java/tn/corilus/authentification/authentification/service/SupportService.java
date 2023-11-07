@@ -22,4 +22,6 @@ public interface SupportService {
 
     List<Support> getAllSupports();
     Support getSupportWithLeastConversations();
+
+    String deleteSupport(Long id);
 }

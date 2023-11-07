@@ -61,6 +61,12 @@ public class ConversationServiceImpl implements ConversationService {
     }
 
     @Override
+    public String deleteConversation(Long id) {
+        conversationRepository.deleteById(id);
+        return "Conversation Deleted";
+    }
+
+    @Override
     public List<Conversation> getConversationBySupportIdAndArchivedIsFalse(Long supportId) {
         return conversationRepository.findAllBySupportIdAndAndArchivedIsFalseOrderByLastUpdatedAtDesc(supportId);
     }
@@ -109,6 +115,16 @@ public class ConversationServiceImpl implements ConversationService {
     @Override
     public List<Conversation> getConversationsBySupportIdAndArchivedIsTrue(Long supportId) {
         return conversationRepository.findAllBySupportIdAndAndArchivedIsTrueOrderByLastUpdatedAtDesc(supportId);
+    }
+
+    @Override
+    public List<Conversation> getConversationsBySupportId(Long supportId) {
+        return conversationRepository.findAllBySupportId(supportId);
+    }
+
+    @Override
+    public List<Conversation> getConversationsByDoctorId(Long doctorId) {
+        return conversationRepository.findAllByDoctorId(doctorId);
     }
 
 }

@@ -15,4 +15,5 @@ public interface ClaimRepository extends JpaRepository<Claim,Long> {
     List<Claim> findAllBySupportIdAndTreatedIsFalse(Long supportId);
     List<Claim> findAllBySupportIdAndAcceptedIsFalseAndTreatedIsTrue(Long supportId);
     List<Claim> findAllBySupportIdAndAcceptedIsTrue(Long supportId);
+    List<Claim> findAllBySupportId(Long Id);
 }

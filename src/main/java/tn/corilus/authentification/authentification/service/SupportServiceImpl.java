@@ -3,7 +3,13 @@ package tn.corilus.authentification.authentification.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import tn.corilus.authentification.authentification.entities.Claim;
+import tn.corilus.authentification.authentification.entities.Conversation;
+import tn.corilus.authentification.authentification.entities.Message;
 import tn.corilus.authentification.authentification.entities.Support;
+import tn.corilus.authentification.authentification.repository.ClaimRepository;
+import tn.corilus.authentification.authentification.repository.ConversationRepository;
+import tn.corilus.authentification.authentification.repository.MessageRepository;
 import tn.corilus.authentification.authentification.repository.SupportRepository;
 
 import java.io.BufferedOutputStream;
@@ -13,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -20,8 +27,15 @@ public class SupportServiceImpl implements SupportService {
 
     private final SupportRepository supportRepository;
 
-    public SupportServiceImpl(SupportRepository supportRepository) {
+    private final ConversationRepository conversationRepository;
+    private final ClaimRepository claimRepository;
+    private final MessageRepository messageRepository;
+
+    public SupportServiceImpl(SupportRepository supportRepository, ConversationRepository conversationRepository, ClaimRepository claimRepository, MessageRepository messageRepository) {
         this.supportRepository = supportRepository;
+        this.conversationRepository = conversationRepository;
+        this.claimRepository = claimRepository;
+        this.messageRepository = messageRepository;
     }
 
 
@@ -96,6 +110,29 @@ public class SupportServiceImpl implements SupportService {
         } else {
             return supports.get(0);
         }
+    }
+
+    @Override
+    public String deleteSupport(Long id) {
+        Support support =supportRepository.findSupportWithLeastConversations(id).size()>0 ? supportRepository.findSupportWithLeastConversations(id).get(0):null;
+
+        for(Conversation conversation : conversationRepository.findAllBySupportId(id)){
+            conversation.setSupport(support);
+            for(Message message : conversation.getMessages()){
+                if (Objects.equals(message.getSender().getId(), id)){
+                    message.setSender(support);
+                    messageRepository.save(message);
+                }
+            }
+            conversationRepository.save(conversation);
+        }
+        for(Claim claim : claimRepository.findAllBySupportId(id)){
+            claim.setSupport(support);
+            claimRepository.save(claim);
+        }
+
+        supportRepository.deleteById(id);
+        return "Support effacé avec succès";
     }
 
 

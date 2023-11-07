@@ -71,4 +71,13 @@ public class SupportController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') ")
+    @DeleteMapping("/support/delete/{id}")
+    public ResponseEntity<String> deleteSupport(@PathVariable Long id ) {
+
+        return new ResponseEntity<>(supportService.deleteSupport(id),
+                HttpStatus.OK);
+    }
+
+
 }

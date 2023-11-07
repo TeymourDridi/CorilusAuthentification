@@ -13,6 +13,7 @@ import org.springframework.kafka.core.*;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import tn.corilus.authentification.authentification.entities.Conversation;
+import tn.corilus.authentification.authentification.entities.EmailDetails;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,10 +43,26 @@ public class KafkaConfig {
 
         return new DefaultKafkaProducerFactory<>(configProps);
     }
+ @Bean
+    public ProducerFactory<String, EmailDetails> producerFactoryEmail() {
+        Map<String, Object> configProps = new HashMap<>();
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        configProps.put("security.protocol", "SASL_SSL");
+        configProps.put("sasl.mechanism", "PLAIN");
+        configProps.put("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"" + apiKey + "\" password=\"" + apiSecret + "\";");
+
+        return new DefaultKafkaProducerFactory<>(configProps);
+    }
 
     @Bean
     public KafkaTemplate<String, Conversation> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
+    }
+    @Bean
+    public KafkaTemplate<String, EmailDetails> kafkaTemplateEmail() {
+        return new KafkaTemplate<>(producerFactoryEmail());
     }
 
     @Bean

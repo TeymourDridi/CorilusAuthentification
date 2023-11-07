@@ -14,6 +14,7 @@ public interface ConversationService {
 
     Conversation createConversation(Doctor doctor);
     Conversation getConversationById(Long conversationId);
+    String deleteConversation(Long id);
     List<Conversation> getConversationBySupportIdAndArchivedIsFalse(Long supportId);
 
     void markAllMessagesAsReaded(Long conversationId);
@@ -22,5 +23,7 @@ public interface ConversationService {
 
     Conversation archiveConversation(Long conversationId);
     List<Conversation> getConversationsBySupportIdAndArchivedIsTrue(Long supportId);
+    List<Conversation> getConversationsBySupportId(Long supportId);
+    List<Conversation> getConversationsByDoctorId(Long doctorId);
 
 }

@@ -1,9 +1,13 @@
 package tn.corilus.authentification.authentification.service;
 
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import tn.corilus.authentification.authentification.entities.Conversation;
 import tn.corilus.authentification.authentification.entities.Doctor;
+import tn.corilus.authentification.authentification.entities.EmailDetails;
+import tn.corilus.authentification.authentification.repository.ConversationRepository;
 import tn.corilus.authentification.authentification.repository.DoctorRepository;
 
 import java.io.BufferedOutputStream;
@@ -20,10 +24,14 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
     private final AdminService adminService;
+    private final ConversationRepository conversationRepository;
+    private final KafkaTemplate<String, EmailDetails> kafkaTemplate;
 
-    public DoctorServiceImpl(DoctorRepository doctorRepository, AdminService adminService) {
+    public DoctorServiceImpl(DoctorRepository doctorRepository, AdminService adminService, ConversationRepository conversationRepository, KafkaTemplate<String, EmailDetails> kafkaTemplate) {
         this.doctorRepository = doctorRepository;
         this.adminService = adminService;
+        this.conversationRepository = conversationRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
 
@@ -74,14 +82,24 @@ public class DoctorServiceImpl implements DoctorService {
     public Doctor modifyDoctor(Doctor doctor) {
 
         Doctor originalDoctor = doctorRepository.findById(doctor.getId()).orElse(null);
-        assert originalDoctor != null;
-        originalDoctor.setAddress(doctor.getAddress());
-        originalDoctor.setEmail(doctor.getEmail());
-        originalDoctor.setName(doctor.getName());
-        originalDoctor.setLastname(doctor.getLastname());
-        originalDoctor.setPhone(doctor.getPhone());
+        if (originalDoctor != null) {
+            originalDoctor.setAddress(doctor.getAddress());
+            originalDoctor.setEmail(doctor.getEmail());
+            originalDoctor.setName(doctor.getName());
+            originalDoctor.setLastname(doctor.getLastname());
+            originalDoctor.setPhone(doctor.getPhone());
+            return doctorRepository.save(originalDoctor);
+        }
+        return null;
+    }
 
-        return doctorRepository.save(originalDoctor);
+    @Override
+    public String deleteDoctor(Long id) {
+        for(Conversation conversation : conversationRepository.findAllByDoctorId(id)){
+            conversationRepository.deleteById(conversation.getId());
+        }
+        doctorRepository.deleteById(id);
+        return "Compte Docteur effacé avec succès";
     }
 
     @Override
@@ -95,6 +113,14 @@ public class DoctorServiceImpl implements DoctorService {
         assert doctor != null;
         doctor.setApproved(true);
         doctor.setAdmin(adminService.getAdmin(idAdmin));
+        EmailDetails emailDetails= new EmailDetails();
+        emailDetails.setRecipient(doctor.getEmail());
+        emailDetails.setSubject("Compte Approuvé");
+        emailDetails.setUserName(doctor.getUsername());
+        emailDetails.setLastName(doctor.getLastname());
+        emailDetails.setName(doctor.getName());
+        kafkaTemplate.send("email-topic", emailDetails);
+
         return doctorRepository.save(doctor);
     }
 
@@ -104,6 +130,13 @@ public class DoctorServiceImpl implements DoctorService {
         assert doctor != null;
         doctor.setBlocked(true);
         doctor.setAdmin(adminService.getAdmin(idAdmin));
+        EmailDetails emailDetails= new EmailDetails();
+        emailDetails.setRecipient(doctor.getEmail());
+        emailDetails.setSubject("Compte Bloqué");
+        emailDetails.setUserName(doctor.getUsername());
+        emailDetails.setLastName(doctor.getLastname());
+        emailDetails.setName(doctor.getName());
+        kafkaTemplate.send("email-topic", emailDetails);
         return doctorRepository.save(doctor);
     }
 
@@ -113,6 +146,13 @@ public class DoctorServiceImpl implements DoctorService {
         assert doctor != null;
         doctor.setBlocked(false);
         doctor.setAdmin(adminService.getAdmin(idAdmin));
+        EmailDetails emailDetails= new EmailDetails();
+        emailDetails.setRecipient(doctor.getEmail());
+        emailDetails.setSubject("Compte Débloqué");
+        emailDetails.setUserName(doctor.getUsername());
+        emailDetails.setLastName(doctor.getLastname());
+        emailDetails.setName(doctor.getName());
+        kafkaTemplate.send("email-topic", emailDetails);
         return doctorRepository.save(doctor);
     }
 

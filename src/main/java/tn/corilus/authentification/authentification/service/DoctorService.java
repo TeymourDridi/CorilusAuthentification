@@ -16,6 +16,7 @@ public interface DoctorService {
     Doctor getDoctor(Long id);
     String addPicture(Long idUser, MultipartFile file) throws IOException;
     Doctor modifyDoctor(Doctor doctor);
+    String deleteDoctor(Long id);
     List<Doctor> getAllDoctorsOrderdByApprooved();
     Doctor approveDoctor(Long id,Long idAdmin);
     Doctor blockDoctor(Long id,Long idAdmin);
